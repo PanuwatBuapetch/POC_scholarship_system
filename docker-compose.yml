@@ -20,7 +20,7 @@ services:
     build: ./POC_scholaship_server
     container_name: psu_backend
     ports:
-      - "5001:5000"
+      - "5000:5000"
     environment:
       DATABASE_URL: "postgresql://postgres:1234@postgres:5432/psu_scholarship?schema=public"
       PORT: 5000
@@ -28,13 +28,14 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+    # ไม่ต้องใส่ command: ซ้ำตรงนี้ ให้ Dockerfile จัดการเอง
 
   # 3. Frontend Service (POC_scholaship_system)
   client:
     build: ./POC_scholaship_system
     container_name: psu_frontend
     ports:
-      - "3000:3000"   # แนะนำให้ใช้ 3000:3000 มาตรฐาน
+      - "3000:3000"
     tty: true
     environment:
       - CHOKIDAR_USEPOLLING=true

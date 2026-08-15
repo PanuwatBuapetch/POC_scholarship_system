@@ -1,4 +1,8 @@
+นี่คือเนื้อหาสำหรับอัปเดตลงในไฟล์ **`README.md`** โดยเพิ่มหัวข้อ **"วิธีติดตั้งและรันแบบ Local (Manual Setup)"** ไว้อย่างชัดเจน เพื่อให้กรรมการหรือผู้ตรวจสามารถเลือกเปิดระบบแบบรันตรงในเครื่องได้ทันที หากไม่อยากเจอปัญหา Docker:
 
+---
+
+```markdown
 # 🎓 ระบบบริหารจัดการคำขอทุนการศึกษา มหาวิทยาลัยสงขลานครินทร์
 > **PSU Scholarship Management System (POC Project)**  
 > ระบบสำหรับยื่นคำขอรับทุนการศึกษาของนักศึกษา และระบบพิจารณาจัดการคำขอทุนการศึกษาสำหรับเจ้าหน้าที่
@@ -30,38 +34,70 @@
 
 | ส่วนของระบบ | เทคโนโลยีที่ใช้ |
 | :--- | :--- |
-| **Frontend** | React, React Router v6, Bootstrap 5, Axios |
+| **Frontend** | React, React Router v6, Bootstrap 5, Axios, Vite |
 | **Backend API** | Node.js, Express.js (RESTful API), JWT, Bcrypt |
 | **Database & ORM** | PostgreSQL, Prisma ORM |
 | **Containerization** | Docker, Docker Compose |
 
 ---
 
-## 🚀 วิธีการติดตั้งและรันโปรเจกต์ (Quick Start with Docker)
+## 🚀 วิธีการติดตั้งและเริ่มต้นระบบ (Setup & Run)
 
-ระบบรองรับการรันแบบ **One-Command Setup** ผ่าน Docker Compose โดยจะทำการ Start ทั้ง Database (PostgreSQL), Backend API และ Frontend พร้อมรัน Script หยอดข้อมูลตั้งต้น (Seed Data) โดยอัตโนมัติ
+เลือกวิธีการรันระบบได้ 2 รูปแบบตามความสะดวก:
 
-### 1. โคลน Repository
-```bash
-git clone <YOUR_REPOSITORY_URL>
-cd <YOUR_PROJECT_FOLDER>
+### ⚙️ ตัวเลือกที่ 1: ติดตั้งและรันแบบ Local (แนะนำหากไม่ต้องการใช้ Docker)
+
+#### 1. เตรียมฐานข้อมูลและตั้งค่า Environment
+สร้างฐานข้อมูลใน PostgreSQL ชื่อ `psu_scholarship` และตรวจสอบไฟล์ `.env` ในโฟลเดอร์ `POC_scholaship_server`:
+```env
+PORT=5000
+DATABASE_URL="postgresql://postgres:1234@localhost:5432/psu_scholarship?schema=public"
+JWT_SECRET="psu-scholarship-jwt-secret-key-2026"
 
 ```
 
-### 2. สั่งรันระบบด้วย Docker Compose
+#### 2. รันฝั่ง Backend & ฐานข้อมูล Prisma (Terminal 1)
+
+```bash
+cd POC_scholaship_server
+npm install
+npx prisma generate
+npx prisma db push
+node prisma/seed.js
+npm start
+
+```
+
+*(Backend RESTful API จะเริ่มทำงานที่พอร์ต `http://localhost:5000` พร้อม Seed ข้อมูล 25 รายการทันที)*
+
+#### 3. รันฝั่ง Frontend Client (Terminal 2)
+
+```bash
+cd POC_scholarship_system
+npm install
+npm run dev
+
+```
+
+*(Frontend จะพร้อมใช้งานที่ `http://localhost:3000`)*
+
+---
+
+### 🐳 ตัวเลือกที่ 2: รันผ่าน Docker Compose (One-Command Setup)
+
+1. สลับ `DATABASE_URL` ใน `.env` เป็นแบบชี้ไปยัง container:
+
+```env
+DATABASE_URL="postgresql://postgres:1234@postgres:5432/psu_scholarship?schema=public"
+
+```
+
+2. สั่งเริ่มระบบ:
 
 ```bash
 docker compose up --build
 
 ```
-
-*(กรณีต้องการรันเป็น Background Process ให้ใส่ `-d` ต่อท้าย: `docker compose up --build -d`)*
-
-### 3. เข้าใช้งานระบบ
-
-* **หน้านักศึกษายื่นคำขอทุน:** [http://localhost:3000](http://localhost:3000)
-* **หน้าจัดการสำหรับเจ้าหน้าที่:** [http://localhost:3000/login](http://localhost:3000/login)
-* **Backend RESTful API:** [http://localhost:5000](http://localhost:5000)
 
 ---
 
@@ -92,17 +128,6 @@ docker compose up --build
 
 * `GET /api/scholarship-types` - ดึงรายชื่อประเภททุนทั้งหมด
 * `GET /api/requests/stats` - ดึงข้อมูลสรุปสถิติสำหรับ Dashboard
-
----
-
-## 🛑 คำสั่งหยุดการทำงาน (Stop Services)
-
-```bash
-docker compose down
-
-```
-
-*(หากต้องการลบ Volume ฐานข้อมูลเพื่อเริ่มใหม่ทั้งหมด: `docker compose down -v`)*
 
 ```
 
