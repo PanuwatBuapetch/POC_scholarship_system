@@ -1,0 +1,51 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum RequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model User {
+  id        String   @id @default(uuid())
+  username  String   @unique
+  password  String
+  fullName  String
+  createdAt DateTime @default(now())
+}
+
+model ScholarshipType {
+  id       Int                  @id @default(autoincrement())
+  name     String               @unique
+  requests ScholarshipRequest[]
+}
+
+model ScholarshipRequest {
+  id                String          @id @default(uuid())
+  requestNo         String          @unique
+  studentId         String
+  fullName          String
+  faculty           String
+  academicYearLevel Int
+  gpax              Float
+  email             String
+  scholarshipTypeId Int
+  scholarshipType   ScholarshipType @relation(fields: [scholarshipTypeId], references: [id])
+  requestedAmount   Float
+  bankAccountNo     String
+  reason            String
+  pdpaConsent       Boolean
+  status            RequestStatus   @default(PENDING)
+  remark            String?
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+  deletedAt         DateTime?
+}
