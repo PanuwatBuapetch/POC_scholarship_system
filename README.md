@@ -1,48 +1,50 @@
 ```markdown
-# 🎓 ระบบบริหารจัดการคำขอทุนการศึกษา มหาวิทยาลัยสงขลานครินทร์
-> **PSU Scholarship Management System (POC Project)**  
-> ระบบสำหรับยื่นคำขอรับทุนการศึกษาของนักศึกษา และระบบพิจารณาจัดการคำขอทุนการศึกษาสำหรับเจ้าหน้าที่
+# PSU Scholarship Management System (POC)
+
+ระบบเว็บแอปสำหรับยื่นคำขอรับทุนของนักศึกษา และระบบจัดการ/พิจารณาคำขอสำหรับเจ้าหน้าที่ ม.อ. (โปรเจกต์ POC)
 
 ---
 
-## 📌 คุณสมบัติเด่นของระบบ (Features)
+## ฟีเจอร์หลัก
 
-### 👨‍🎓 สำหรับนักศึกษา (Public Portal)
-* **แบบฟอร์มยื่นคำขอทุน:** เลือกระบุประเภททุน 5 ประเภท กรอกข้อมูลส่วนตัว ผลการเรียน GPAX วัตถุประสงค์ และระบุเลขบัญชีธนาคาร
-* **ระบบตรวจสอบความถูกต้อง (Validation):** ตรวจสอบรูปแบบรหัสนักศึกษา, PSU Email, GPAX (0.00 - 4.00) และยอดเงิน
-* **PDPA Consent:** ระบบยินยอมเงื่อนไขการคุ้มครองข้อมูลส่วนบุคคลก่อนส่งคำขอ
+### สำหรับนักศึกษา (หน้าบ้าน)
+* ฟอร์มยื่นคำขอทุน เลือกได้ 5 ประเภท พร้อมกรอกประวัติ, เกรดเฉลี่ย (GPAX), เหตุผล และเลขบัญชี
+* เช็กความถูกต้องของข้อมูลอัตโนมัติ (รหัสนักศึกษา, อีเมล ม.อ., GPAX 0.00-4.00, ยอดเงิน)
+* มีกล่องกดยินยอมข้อกำหนด PDPA ก่อนกดส่งคำขอ
 
-### 👨‍💼 สำหรับเจ้าหน้าที่ (Admin Portal)
-* **ระบบรักษาความปลอดภัย:** เข้าสู่ระบบด้วย JWT Authentication และรหัสผ่านผ่านการเข้ารหัสด้วย `bcrypt`
-* **การจัดการคำขอทุน (CRUD):** 
-  * ดูรายการคำขอทุนพร้อมแบ่งหน้า (Pagination หน้าละ 10 รายการ)
-  * ค้นหาคำขอด้วยรหัสนักศึกษา, ชื่อ-นามสกุล หรือเลขที่คำขอ (REQ-XXXX)
-  * กรองข้อมูลตามสถานะ (`PENDING`, `APPROVED`, `REJECTED`) และตามประเภททุน
-  * พิจารณาอนุมัติ/ไม่อนุมัติ พร้อมระบุหมายเหตุ
-  * เพิ่มและแก้ไขข้อมูลคำขอทุนโดยเจ้าหน้าที่
-  * ระบบลบข้อมูลแบบปลอดภัย (Soft Delete เฉพาะรายการที่รอพิจารณา)
-* **Data Masking:** ปกปิดเลขที่บัญชีธนาคารเพื่อความปลอดภัย (เช่น `123-x-xx789-0`)
-* **แดชบอร์ดสรุปภาพรวม (Dashboard):** แสดงตัวเลขสถิติคำขอแยกตามสถานะ และยอดรวมงบประมาณที่ขอรับทุนแยกตามประเภททุน
+### สำหรับเจ้าหน้าที่ (หลังบ้าน)
+* ล็อกอินด้วย JWT รหัสผ่านเข้ารหัสด้วย bcrypt
+* หน้าจัดการคำขอทุน (ค้นหาตามชื่อ/รหัส/เลขคำขอ, แบ่งหน้าละ 10 รายการ, กรองตามสถานะและประเภททุน)
+* กดอนุมัติ/ไม่อนุมัติ พร้อมใส่หมายเหตุได้
+* แก้ไขข้อมูลคำขอได้ และมีระบบ Soft Delete สำหรับลบรายการที่อยู่ระหว่างรอพิจารณา
+* ซ่อนเลขบัญชีธนาคาร (Data Masking) เช่น `123-x-xx789-0` เพื่อความปลอดภัย
+* แดชบอร์ดสรุปยอดคำขอแต่ละสถานะและงบประมาณรวม
 
 ---
 
-## 🛠️ สถาปัตยกรรมและเทคโนโลยี (Tech Stack)
+## Tech Stack
 
-| ส่วนของระบบ | เทคโนโลยีที่ใช้ |
-| :--- | :--- |
-| **Frontend** | React, React Router v6, Bootstrap 5, Axios, Vite |
-| **Backend API** | Node.js, Express.js (RESTful API), JWT, Bcrypt, Dotenv |
-| **Database & ORM** | PostgreSQL, Prisma ORM |
-| **Containerization** | Docker, Docker Compose |
+* **Frontend:** React 18, Vite, React Router v6, Bootstrap 5, Axios
+* **Backend:** Node.js, Express.js
+* **Database & ORM:** PostgreSQL, Prisma ORM
+* **Auth:** JWT, Bcrypt
+* **Container:** Docker, Docker Compose
 
 ---
 
-## 🚀 วิธีการติดตั้งและเริ่มต้นระบบ (Setup & Run)
+## วิธีติดตั้งและรันโปรเจกต์
 
-### ⚙️ วิธีที่ 1: ติดตั้งและรันแบบ Local ในเครื่อง (แนะนำ)
+### สิ่งที่ต้องมีในเครื่อง
+* Node.js (v18+)
+* PostgreSQL (v14+) หรือ Docker
 
-#### 1. เตรียมฐานข้อมูลและตั้งค่า Environment
-สร้างฐานข้อมูลใน PostgreSQL ชื่อ `psu_scholarship` และตรวจสอบไฟล์ `.env` ในโฟลเดอร์ `POC_scholaship_server`:
+---
+
+### วิธีที่ 1: รันแบบ Local บนเครื่อง (สำหรับ Dev)
+
+#### 1. ตั้งค่าฐานข้อมูลและ `.env`
+สร้างฐานข้อมูลใน PostgreSQL ชื่อ `psu_scholarship` แล้วสร้างไฟล์ `.env` ไว้ที่โฟลเดอร์ `POC_scholaship_server`:
+
 ```env
 PORT=5000
 DATABASE_URL="postgresql://postgres:1234@localhost:5432/psu_scholarship?schema=public"
@@ -50,7 +52,7 @@ JWT_SECRET="psu-scholarship-jwt-secret-key-2026"
 
 ```
 
-#### 2. รันฝั่ง Backend & ฐานข้อมูล Prisma (Terminal 1)
+#### 2. รัน Server (Terminal 1)
 
 ```bash
 cd POC_scholaship_server
@@ -62,9 +64,9 @@ npm start
 
 ```
 
-*(Backend RESTful API จะเริ่มทำงานที่พอร์ต `http://localhost:5000` พร้อม Seed ข้อมูล 25 รายการทันที)*
+> Server จะรันที่ `http://localhost:5000` (พร้อม Mock Data 25 รายการ)
 
-#### 3. รันฝั่ง Frontend Client (Terminal 2)
+#### 3. รัน Client (Terminal 2)
 
 ```bash
 cd POC_scholarship_system
@@ -73,55 +75,57 @@ npm run dev
 
 ```
 
-*(Frontend จะพร้อมใช้งานที่ `http://localhost:3000`)*
+> เปิดเว็บได้ที่ `http://localhost:3000` (หรือพอร์ตที่ Vite แจ้งใน Terminal)
 
 ---
 
-### 🐳 วิธีที่ 2: รันผ่าน Docker Compose
+### วิธีที่ 2: รันผ่าน Docker Compose
 
-1. ตรวจสอบให้แน่ใจว่าได้แก้ `DATABASE_URL` ใน `POC_scholaship_server/.env` ชี้ไปที่ Container:
+1. แก้ไข `DATABASE_URL` ใน `POC_scholaship_server/.env` ให้ชี้ไปที่ container:
 
 ```env
+PORT=5000
 DATABASE_URL="postgresql://postgres:1234@postgres:5432/psu_scholarship?schema=public"
+JWT_SECRET="psu-scholarship-jwt-secret-key-2026"
 
 ```
 
-2. สั่งเริ่มระบบ:
+2. สั่งรัน container:
 
 ```bash
-docker compose up --build
+docker compose up --build -d
 
 ```
 
 ---
 
-## 🔑 บัญชีทดสอบสำหรับเจ้าหน้าที่ (Credentials)
+## บัญชีสำหรับทดสอบ (เจ้าหน้าที่)
 
-| Username | Password | สิทธิ์ |
-| --- | --- | --- |
-| `admin` | `admin1234` | ผู้ดูแลระบบ / เจ้าหน้าที่สวัสดิการ |
+* **Username:** `admin`
+* **Password:** `admin1234`
 
 ---
 
-## 📡 สรุป RESTful API Endpoints
+## สรุป API Endpoints
 
-### 🔐 Authentication
+### Auth
 
-* `POST /api/auth/login` - เข้าสู่ระบบรับ JWT Token
-* `POST /api/auth/register-admin` - สร้างบัญชี Admin ใหม่
+* `POST /api/auth/login` — เข้าสู่ระบบรับ JWT Token
+* `POST /api/auth/register-admin` — สร้างบัญชีแอดมินใหม่ (Admin Only)
 
-### 📋 Scholarship Requests
+### คำขอทุน (Requests)
 
-* `GET /api/requests` - ดึงรายการคำขอทุน (รองรับ `page`, `limit`, `search`, `status`, `typeId`)
-* `POST /api/requests` - ยื่นคำขอทุนใหม่ (นักศึกษา/เจ้าหน้าที่)
-* `PUT /api/requests/:id` - แก้ไขข้อมูลคำขอทุน
-* `PATCH /api/requests/:id/status` - พิจารณา/เปลี่ยนสถานะคำขอ (`PENDING`, `APPROVED`, `REJECTED`)
-* `DELETE /api/requests/:id` - ลบคำขอทุน (Soft Delete)
+* `GET /api/requests` — ดึงรายการคำขอ (รองรับ query: `page`, `limit`, `search`, `status`, `typeId`)
+* `POST /api/requests` — ส่งคำขอทุนใหม่
+* `GET /api/requests/:id` — ดูรายละเอียดคำขอตาม ID
+* `PUT /api/requests/:id` — แก้ไขข้อมูลคำขอ
+* `PATCH /api/requests/:id/status` — อัปเดตสถานะคำขอ (`PENDING`, `APPROVED`, `REJECTED`)
+* `DELETE /api/requests/:id` — ลบคำขอ (Soft Delete)
 
-### 📊 Master Data & Stats
+### ข้อมูลอื่นๆ & แดชบอร์ด
 
-* `GET /api/scholarship-types` - ดึงรายชื่อประเภททุนทั้งหมด
-* `GET /api/requests/stats` - ดึงข้อมูลสรุปสถิติสำหรับ Dashboard
+* `GET /api/scholarship-types` — รายการประเภททุนทั้งหมด
+* `GET /api/requests/stats` — ข้อมูลสถิติสำหรับหน้า Dashboard
 
 ```
 
